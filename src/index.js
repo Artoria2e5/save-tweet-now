@@ -211,7 +211,7 @@ export default class LiveWebRecorder extends LitElement
     };
 
     //this.dispatchEvent(new CustomEvent("load-started"));
-    if (this.url && this.url.startsWith("https://twitter.com/")) {
+    if (this.url && (this.url.startsWith("https://twitter.com/") || this.url.startsWith("https://x.com"))) {
       this.iframeUrl = `w/${this.collId}/mp_/${this.oembedPrefix}${this.url}`;
     } else {
       this.iframeUrl = "";
@@ -267,7 +267,7 @@ export default class LiveWebRecorder extends LitElement
   renderURLInput() {
     return html`
       <sl-form @sl-submit="${this.onUpdateUrl}" class="block w-full text-center">
-        <sl-input class="w-full" id="url" placeholder="Enter Twitter URL (https://twitter.com/...) to load Tweet" .value="${this.url}" required>
+        <sl-input class="w-full" id="url" placeholder="Enter Twitter URL (https://x.com/...) to load Tweet" .value="${this.url}" required>
         </sl-input>
         <sl-switch class="float-right" style="--thumb-size: 16px" ?checked=${this.autoupload} @sl-change="${() => this.autoupload = !this.autoupload}">Auto-upload to IPFS</sl-switch>
         <div class="mt-10">
@@ -537,7 +537,7 @@ export default class LiveWebRecorder extends LitElement
       url = url.slice(this.oembedPrefix.length);
     }
     const urlobj = new URL(url);
-    if (urlobj.host !== "twitter.com") {
+    if (urlobj.host !== "twitter.com" && urlobj.host !== "x.com") {
       return url;
     }
     urlobj.protocol = "https";
